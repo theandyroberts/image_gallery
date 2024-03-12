@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Image Gallery Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .image-box {
+      flex: 0 0 calc(30% - 10px);
+      /* Equal width for three columns */
+      background-color: #fff;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      /* Center vertically */
+      justify-content: center;
+      /* Center horizontally */
+    }
+
+    img {
+      max-width: 300px;
+      max-height: 300px;
+      object-fit: contain;
+      /* Maintain aspect ratio */
+      flex-grow: 1;
+      /* Allow image boxes to expand to fit images */
+    }
+
+    .image-url {
+      margin-top: 10px;
+      word-wrap: break-word;
+    }
+
+    .url-text {
+      display: none;
+      /* Hide the URL text */
+    }
+
+    .copy-button {
+      background-color: #003baa;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .copy-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+    <h1>Select an Image Set:</h1>
+    <ul id="menu">
+        <!-- Manually define menu items here -->
+        <li><a href="#" data-src="mammo.json">Mammo</a></li>
+	<li><a href="#" data-src="heart.json">Heart</a></li>
+        <li><a href="#" data-src="spine.json">Spine</a></li>
+        <!-- Add more items as needed -->
+    </ul>
+
+    <div class="container" id="image-container">
+        <!-- Images will be dynamically generated here -->
+    </div>
+
+    <script>
+        // Function to generate image boxes dynamically
+        function generateImageBoxes(imageUrls) {
+            const container = document.getElementById("image-container");
+
+            container.innerHTML = ''; // Clear previous images
+
+            imageUrls.forEach((imageUrl) => {
+                const imageBox = document.createElement("div");
+                imageBox.className = "image-box";
+
+                const img = document.createElement("img");
+                img.src = imageUrl;
+                img.alt = "Image";
+
+                const imageUrlDiv = document.createElement("div");
+                imageUrlDiv.className = "image-url";
+
+                const urlText = document.createElement("span");
+                urlText.className = "url-text";
+                urlText.textContent = "URL: " + imageUrl;
+
+                const copyButton = document.createElement("button");
+                copyButton.className = "copy-button";
+                copyButton.textContent = "Copy";
+                copyButton.onclick = function () {
+                    copyToClipboard(imageUrl);
+                };
+
+                imageUrlDiv.appendChild(urlText);
+                imageUrlDiv.appendChild(copyButton);
+                imageBox.appendChild(img);
+                imageBox.appendChild(imageUrlDiv);
+
+                container.appendChild(imageBox);
+            });
+        }
+
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            console.log('URL copied to clipboard: ' + text);
+        }
+
+        // Function to handle menu item click
+        function handleMenuItemClick(event) {
+            event.preventDefault();
+            const selectedJsonFile = event.target.getAttribute('data-src');
+            if (selectedJsonFile) {
+                // Load and parse the selected JSON file
+                fetch(selectedJsonFile)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        generateImageBoxes(data.imageUrls);
+                    })
+                    .catch((error) => {
+                        console.error('Error loading JSON:', error);
+                    });
+            }
+        }
+
+        // Add click event listeners to menu items
+        const menuItems = document.querySelectorAll("#menu a[data-src]");
+        menuItems.forEach((menuItem) => {
+            menuItem.addEventListener('click', handleMenuItemClick);
+        });
+    </script>
+</body>
+</html>

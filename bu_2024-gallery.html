@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Image Gallery Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .image-box {
+      flex: 0 0 calc(30% - 10px);
+      /* Equal width for three columns */
+      background-color: #fff;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      /* Center vertically */
+      justify-content: center;
+      /* Center horizontally */
+    }
+
+    img {
+      max-width: 300px;
+      max-height: 300px;
+      object-fit: contain;
+      /* Maintain aspect ratio */
+      flex-grow: 1;
+      /* Allow image boxes to expand to fit images */
+    }
+
+    .image-url {
+      margin-top: 10px;
+      word-wrap: break-word;
+    }
+
+    .url-text {
+      display: none;
+      /* Hide the URL text */
+    }
+
+    .copy-button {
+      background-color: #003baa;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .copy-button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Add this CSS to make menu items display horizontally */
+    #menu {
+      list-style: none;
+      display: flex;
+      flex-direction: row;
+      /* Display items in a row */
+      padding: 0;
+    }
+
+    #menu li {
+      margin-right: 10px;
+      /* Adjust the spacing between menu items */
+    }
+
+    #menu a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      padding: 5px 10px;
+    }
+    
+    #menu .selected a {
+      background-color: #007bff; /* Highlight color for selected item */
+      color: #fff; /* Text color for selected item */
+    }
+
+    /* Add this CSS for the glowing effect */
+    .glow {
+        animation: glow 3s reverse; /* Reverse the animation */
+    }
+
+    @keyframes glow {
+        0% {
+            box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+        }
+        100% {
+            box-shadow: 0 0 30px 10px rgba(0, 255, 0, 0.7);
+        }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Select an Image Set:</h1>
+  <ul id="menu">
+    <!-- Manually define menu items here -->
+    <li><a href="#" data-src="mammo.json">Mammo</a></li>
+    <li><a href="#" data-src="heart.json">Heart</a></li>
+    <li><a href="#" data-src="spine.json">Spine</a></li>
+    <li><a href="#" data-src="bariatrics.json">Baritrics</a></li>
+    <li><a href="#" data-src="ortho.json">Ortho</a></li>
+    <li><a href="#" data-src="gerd.json">GERD</a></li>
+    <li><a href="#" data-src="colon.json">Colon</a></li>
+    <li><a href="#" data-src="lung.json">Lung</a></li>
+    <li><a href="#" data-src="sysnews.json">SYSNews</a></li>
+    <li><a href="#" data-src="7152.json">7152OR_Gyn</a></li>
+    <li><a href="#" data-src="7224.json">7224NCAUCC</a></li>
+    <li><a href="#" data-src="7234.json">7234_SwNews</a></li>
+    <li><a href="#" data-src="7148.json">7148_PS_HEART_Afib</a></li>
+    <li><a href="#" data-src="7155.json">7155_PS_PC_NPS</a></li>
+    <li><a href="#" data-src="7220.json">7220_NCA_Heart</a></li>
+    <li><a href="#" data-src="7219.json">7219_SCA_Heart</a></li>
+  </ul>
+
+  <div class="container" id="image-container">
+    <!-- Images will be dynamically generated here -->
+  </div>
+
+  <script>
+    // Function to generate image boxes dynamically
+    function generateImageBoxes(imageUrls) {
+      const container = document.getElementById("image-container");
+
+      container.innerHTML = ''; // Clear previous images
+
+      imageUrls.forEach((imageUrl) => {
+        const imageBox = document.createElement("div");
+        imageBox.className = "image-box";
+
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        img.alt = "Image";
+
+        const imageUrlDiv = document.createElement("div");
+        imageUrlDiv.className = "image-url";
+
+        const urlText = document.createElement("span");
+        urlText.className = "url-text";
+        urlText.textContent = "URL: " + imageUrl;
+
+        const copyButton = document.createElement("button");
+        copyButton.className = "copy-button";
+        copyButton.textContent = "Copy";
+        copyButton.onclick = function () {
+          copyToClipboard(imageUrl,img);
+        };
+
+        imageUrlDiv.appendChild(urlText);
+        imageUrlDiv.appendChild(copyButton);
+        imageBox.appendChild(img);
+        imageBox.appendChild(imageUrlDiv);
+
+        container.appendChild(imageBox);
+      });
+    }
+
+    // Function to copy text to clipboard
+    function copyToClipboard(text, element) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      
+      // Apply the 'glow' class to the copied image element
+      element.classList.add("glow");
+
+      // Remove the 'glow' class after 1 second
+      setTimeout(function() {
+          element.classList.remove("glow");
+      }, 1000);
+     
+      console.log('URL copied to clipboard: ' + text);
+    }
+
+    // Function to handle menu item click
+    function handleMenuItemClick(event) {
+      event.preventDefault();
+
+      // Remove the 'selected' class from all menu items
+      const menuItems = document.querySelectorAll("#menu li");
+      menuItems.forEach((menuItem) => {
+          menuItem.classList.remove("selected");
+      });
+
+      const selectedJsonFile = event.target.getAttribute('data-src');
+      if (selectedJsonFile) {
+
+        // Add the 'selected' class to the clicked menu item
+        event.target.parentElement.classList.add("selected");
+
+        // Generate a cache-busting query parameter (timestamp)
+        const cacheBuster = new Date().getTime();
+
+        // Load and parse the selected JSON file
+        fetch(selectedJsonFile + '?cache=' + cacheBuster)
+	  .then((response) => response.json())
+          .then((data) => {
+            generateImageBoxes(data.imageUrls);
+          })
+          .catch((error) => {
+            console.error('Error loading JSON:', error);
+          });
+      }
+    }
+
+    // Add click event listeners to menu items
+    const menuItems = document.querySelectorAll("#menu a[data-src]");
+    menuItems.forEach((menuItem) => {
+      menuItem.addEventListener('click', handleMenuItemClick);
+    });
+  </script>
+</body>
+
+</html>
