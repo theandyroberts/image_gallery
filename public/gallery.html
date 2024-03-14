@@ -180,7 +180,7 @@
             });
 
             const selectedJsonFile = event.target.getAttribute('data-src');
-	    console.log(selectedJsonFile + 'selected.');
+	    console.log(selectedJsonFile + ' selected.');
             
 	    if (selectedJsonFile) {
 
@@ -208,9 +208,9 @@
             menuItem.addEventListener('click', handleMenuItemClick);
         });
     
-      document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
         // Fetch the list of JSON file names from the server
-        fetch('http://imagecdn.instabrain.ai:6060/api/read-files')
+        fetch('/api/read-files')
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok');
@@ -226,7 +226,7 @@
               const li = document.createElement('li');
               const a = document.createElement('a');
               a.href = "#";
-              a.dataset.src = `../json-files/${file}`; // Adjust the path as needed 
+              a.dataset.src = `../json/${file}`; // Adjust the path as needed 
               a.textContent = file.replace('.json', ''); // Display the file name without the '.json' extension
               a.onclick = function(event) {
                 handleMenuItemClick(event);

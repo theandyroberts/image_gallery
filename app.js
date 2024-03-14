@@ -5,7 +5,7 @@ const path = require('path');
 
 const app = express();
 const PORT = 6060; // Port number for the server
-const jsonFilesDirectory = path.join(__dirname, '/json-files'); 
+const jsonFilesDirectory = path.join(__dirname, 'public', '/json'); 
 
 // Use CORS middleware to allow cross-origin requests
 app.use(cors());
@@ -22,12 +22,12 @@ app.get('/', (req, res) => {
 // static file serving
 app.use(express.static('public'));
 
-// Endpoint to list all JSON files
+// Endpoint to list all JSON
 app.get('/api/read-files', (req, res) => {
   fs.readdir(jsonFilesDirectory, (err, files) => {
     if (err) {
       console.error('Error reading directory:', err);
-      return res.status(500).send('Error reading directory');
+      return res.status(500).send('Error reading directory', jsonFilesDirectory);
     }
 
     console.log(`fetching files...`);
