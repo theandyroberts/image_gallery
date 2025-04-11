@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Image Gallery Menu</title>
+    <title>CDN Image Gallery</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,7 +29,8 @@
             justify-content: space-between;
             align-items: center;
             justify-content: center;
-        }
+            max-width: 380px;
+	}
 
         img {
             max-width: 300px;
@@ -44,7 +45,9 @@
         }
 
         .url-text {
-            display: none;
+	    margin: 10px;
+	    word-break: break-all;
+	    overflow-wrap: break-word;
         }
 
         .copy-button {
@@ -102,7 +105,7 @@
 </head>
 
 <body>
-    <h1>Select an Image Set:</h1>
+    <h1>Select a Project:</h1>
     <ul id="menu">
         <!-- Dynamicly define menu items here -->
     </ul>
@@ -129,9 +132,11 @@
                 const imageUrlDiv = document.createElement("div");
                 imageUrlDiv.className = "image-url";
 
-                const urlText = document.createElement("span");
+                const urlText = document.createElement("h5");
                 urlText.className = "url-text";
-                urlText.textContent = "URL: " + imageUrl;
+		// Extracting the filename from imageUrl
+		const fileName = imageUrl.split('/').pop(); // Splits the URL by '/' and takes the last element
+		urlText.textContent = fileName; // Using fileName instead of the full imageUrl
 
                 const copyButton = document.createElement("button");
                 copyButton.className = "copy-button";

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 6060; // Port number for the server
+const PORT = 6061; // Port number for the server
 const jsonFilesDirectory = path.join(__dirname, 'public', '/json'); 
 
 // Use CORS middleware to allow cross-origin requests
@@ -40,4 +40,5 @@ app.get('/api/read-files', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
 
