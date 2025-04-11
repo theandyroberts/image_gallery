@@ -52,6 +52,8 @@
 
     .url-text {
       margin: 10px;
+      font-size: 12px;
+      color: #555;
       word-break: break-word;
       overflow-wrap: break-word;
     }
@@ -173,7 +175,9 @@
 
         const urlText = document.createElement("div");
         urlText.className = "url-text";
-        urlText.textContent = imageUrl;
+      
+	const fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+	urlText.textContent = fileName;
 
         const copyButton = document.createElement("button");
         copyButton.className = "copy-button";

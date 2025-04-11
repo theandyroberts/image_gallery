@@ -42,3 +42,7 @@ app.listen(PORT, () => {
 });
 
 
+// Catch-all: Serve gallery.html for deep links like /2025_7673
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'gallery.html'));
+});
