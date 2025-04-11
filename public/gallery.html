@@ -1,254 +1,283 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>CDN Image Gallery</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
+  <meta charset="UTF-8">
+  <title>CDN Image Gallery</title>
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
 
-        .image-box {
-            flex: 0 0 calc(30% - 10px);
-            background-color: #fff;
-            padding: 15px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            justify-content: center;
-            max-width: 380px;
-	}
+    h1 {
+      margin-bottom: 10px;
+    }
 
-        img {
-            max-width: 300px;
-            max-height: 300px;
-            object-fit: contain;
-            flex-grow: 1;
-        }
+    #project-title {
+      margin: 20px 0 10px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #003baa;
+    }
 
-        .image-url {
-            margin-top: 10px;
-            word-wrap: break-word;
-        }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
 
-        .url-text {
-	    margin: 10px;
-	    word-break: break-all;
-	    overflow-wrap: break-word;
-        }
+    .image-box {
+      flex: 0 0 calc(30% - 10px);
+      background-color: #fff;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 380px;
+      margin-bottom: 20px;
+    }
 
-        .copy-button {
-            background-color: #003baa;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
+    img {
+      max-width: 300px;
+      max-height: 300px;
+      object-fit: contain;
+      flex-grow: 1;
+    }
 
-        .copy-button:hover {
-            background-color: #0056b3;
-        }
+    .url-text {
+      margin: 10px;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
 
-        /* Add this CSS to make menu items wrap when needed */
-        #menu {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            padding: 0;
-        }
+    .copy-button {
+      background-color: #003baa;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      margin-top: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
 
-        #menu li {
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
+    .copy-button:hover {
+      background-color: #0056b3;
+    }
 
-        #menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            padding: 5px 10px;
-        }
+    .glow {
+      animation: glow 2s ease-out;
+    }
 
-        #menu .selected a {
-            background-color: #007bff;
-            color: #fff;
-        }
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+      }
+      50% {
+        box-shadow: 0 0 20px 10px rgba(0, 255, 0, 0.7);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+      }
+    }
 
-        /* Add this CSS for the glowing effect */
-        .glow {
-            animation: glow 3s reverse;
-        }
+    /* Main menu container */
+    #menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      background-color: #003baa;
+      border-radius: 8px;
+      width: 100%;
+    }
 
-        @keyframes glow {
-            0% {
-                box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
-            }
+    /* Style the top-level section headers */
+    #menu h2 {
+      color: white;
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #003baa;
+      margin: 0;
+      font-size: 18px;
+      user-select: none;
+    }
 
-            100% {
-                box-shadow: 0 0 30px 10px rgba(0, 255, 0, 0.7);
-            }
-        }
-    </style>
+    /* Submenu (projects) - initially hidden */
+    #menu ul {
+      display: none;
+      flex-wrap: wrap;
+      background-color: #0056b3;
+      list-style: none;
+      padding: 10px;
+      margin: 0;
+    }
+
+    /* Make submenu appear BELOW the header when hovered */
+    #menu h2:hover + ul,
+    #menu ul:hover {
+      display: flex;
+    }
+
+    /* Individual project links */
+    #menu li {
+      margin: 5px 10px;
+    }
+
+    /* Project link styling */
+    #menu li a {
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+      display: block;
+      background-color: #0056b3;
+      border-radius: 4px;
+    }
+
+    /* Hover effect on project links */
+    #menu li a:hover {
+      background-color: #007bff;
+    }
+  </style>
 </head>
 
 <body>
-    <h1>Select a Project:</h1>
-    <ul id="menu">
-        <!-- Dynamicly define menu items here -->
-    </ul>
+  <h1>Select a Project:</h1>
 
-    <div class="container" id="image-container">
-        <!-- Images will be dynamically generated here -->
-    </div>
+  <ul id="menu">
+    <!-- Dynamic menu will be generated here -->
+  </ul>
 
-    <script>
-        // Function to generate image boxes dynamically
-        function generateImageBoxes(imageUrls) {
-            const container = document.getElementById("image-container");
+  <h3 id="project-title"></h3> <!-- Breadcrumb area -->
 
-            container.innerHTML = ''; // Clear previous images
+  <div class="container" id="image-container">
+    <!-- Images will be generated here -->
+  </div>
 
-            imageUrls.forEach((imageUrl) => {
-                const imageBox = document.createElement("div");
-                imageBox.className = "image-box";
+  <script>
+    // Generate the image boxes
+    function generateImageBoxes(imageUrls) {
+      const container = document.getElementById("image-container");
+      container.innerHTML = '';
 
-                const img = document.createElement("img");
-                img.src = imageUrl;
-                img.alt = "Image";
+      imageUrls.forEach((imageUrl) => {
+        const imageBox = document.createElement("div");
+        imageBox.className = "image-box";
 
-                const imageUrlDiv = document.createElement("div");
-                imageUrlDiv.className = "image-url";
+        const img = document.createElement("img");
+        img.src = imageUrl;
 
-                const urlText = document.createElement("h5");
-                urlText.className = "url-text";
-		// Extracting the filename from imageUrl
-		const fileName = imageUrl.split('/').pop(); // Splits the URL by '/' and takes the last element
-		urlText.textContent = fileName; // Using fileName instead of the full imageUrl
+        const urlText = document.createElement("div");
+        urlText.className = "url-text";
+        urlText.textContent = imageUrl;
 
-                const copyButton = document.createElement("button");
-                copyButton.className = "copy-button";
-                copyButton.textContent = "Copy";
-                copyButton.onclick = function () {
-                    copyToClipboard(imageUrl, img);
-                };
+        const copyButton = document.createElement("button");
+        copyButton.className = "copy-button";
+        copyButton.textContent = "Copy";
 
-                imageUrlDiv.appendChild(urlText);
-                imageUrlDiv.appendChild(copyButton);
-                imageBox.appendChild(img);
-                imageBox.appendChild(imageUrlDiv);
-
-                container.appendChild(imageBox);
-            });
-        }
-
-        // Function to copy text to clipboard
-        function copyToClipboard(text, element) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-
-            // Apply the 'glow' class to the copied image element
-            element.classList.add("glow");
-
-            // Remove the 'glow' class after 1 second
-            setTimeout(function () {
-                element.classList.remove("glow");
-            }, 1000);
-
-            console.log('URL copied to clipboard: ' + text);
-        }
-
-        // Function to handle menu item click
-        function handleMenuItemClick(event) {
-            event.preventDefault();
-
-            // Remove the 'selected' class from all menu items
-            const menuItems = document.querySelectorAll("#menu li");
-            menuItems.forEach((menuItem) => {
-                menuItem.classList.remove("selected");
-            });
-
-            const selectedJsonFile = event.target.getAttribute('data-src');
-	    console.log(selectedJsonFile + ' selected.');
-            
-	    if (selectedJsonFile) {
-
-                // Add the 'selected' class to the clicked menu item
-                event.target.parentElement.classList.add("selected");
-
-                // Generate a cache-busting query parameter (timestamp)
-                const cacheBuster = new Date().getTime();
-
-                // Load and parse the selected JSON file
-                fetch(selectedJsonFile + '?cache=' + cacheBuster)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        generateImageBoxes(data.imageUrls);
-                    })
-                    .catch((error) => {
-                        console.error('Error loading JSON:', error);
-                    });
-            }
-        }
-
-        // Add click event listeners to menu items
-        const menuItems = document.querySelectorAll("#menu a[data-src]");
-        menuItems.forEach((menuItem) => {
-            menuItem.addEventListener('click', handleMenuItemClick);
+        copyButton.addEventListener("click", () => {
+          navigator.clipboard.writeText(imageUrl).then(() => {
+            imageBox.classList.add("glow");
+            setTimeout(() => {
+              imageBox.classList.remove("glow");
+            }, 2000);
+          });
         });
-    
-        document.addEventListener('DOMContentLoaded', function() {
-        // Fetch the list of JSON file names from the server
-        fetch('/api/read-files')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json();
-          })
-          .then(files => {
-            const menu = document.getElementById('menu');
-            menu.innerHTML = ''; // Clear existing menu items
 
-            // Dynamically create and append <li> elements for each file
-            files.forEach(file => {
-              const li = document.createElement('li');
-              const a = document.createElement('a');
-              a.href = "#";
-              a.dataset.src = `../json/${file}`; // Adjust the path as needed 
-              a.textContent = file.replace('.json', ''); // Display the file name without the '.json' extension
-              a.onclick = function(event) {
-                handleMenuItemClick(event);
-                console.log(`clicked`);
-                }
+        imageBox.appendChild(img);
+        imageBox.appendChild(urlText);
+        imageBox.appendChild(copyButton);
 
-              li.appendChild(a);
-              menu.appendChild(li);
-            });
-          })
-          .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
+        container.appendChild(imageBox);
       });
-    </script>
+    }
 
+    // Load a project
+    function loadProject(projectName) {
+      fetch(`/json/${projectName}.json`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Project not found');
+          }
+          return response.json();
+        })
+        .then(data => {
+          generateImageBoxes(data.imageUrls);
+
+          // Set breadcrumb
+          const projectTitle = document.getElementById("project-title");
+          const section = projectName.startsWith("2025_") ? "2025 Projects" : "Previous Years";
+          projectTitle.textContent = `${section} >> ${projectName}`;
+        })
+        .catch(error => {
+          console.error('Error loading project:', error);
+          document.getElementById('image-container').innerHTML = '<p style="color:red;">Project not found.</p>';
+        });
+    }
+
+    // Build menu dynamically
+    fetch('/api/read-files')
+      .then(response => response.json())
+      .then(files => {
+        const menu = document.getElementById('menu');
+
+        const menu2025 = document.createElement('ul');
+        const menuPrevious = document.createElement('ul');
+
+        const header2025 = document.createElement('h2');
+        header2025.textContent = '2025 Projects';
+        const headerPrevious = document.createElement('h2');
+        headerPrevious.textContent = 'Previous Years';
+
+        menu.appendChild(header2025);
+        menu.appendChild(menu2025);
+        menu.appendChild(headerPrevious);
+        menu.appendChild(menuPrevious);
+
+        files.forEach(file => {
+          const projectName = file.replace('.json', '');
+
+          const listItem = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = `/${projectName}`;
+          link.textContent = projectName;
+
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            history.pushState(null, '', `/${projectName}`);
+            loadProject(projectName);
+          });
+
+          listItem.appendChild(link);
+
+          if (projectName.startsWith('2025_')) {
+            menu2025.appendChild(listItem);
+          } else {
+            menuPrevious.appendChild(listItem);
+          }
+        });
+
+        // On first page load
+        const currentPath = window.location.pathname.replace('/', '');
+        if (currentPath) {
+          loadProject(currentPath);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching JSON files:', error);
+      });
+
+    // Handle back/forward button
+    window.addEventListener('popstate', () => {
+      const currentPath = window.location.pathname.replace('/', '');
+      if (currentPath) {
+        loadProject(currentPath);
+      }
+    });
+  </script>
 </body>
-
 </html>
-
